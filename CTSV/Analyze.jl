@@ -19,9 +19,9 @@ beta3 = output[1]
 # way done before training
 include("dataprep.jl")
 # load montecarlo data
-montecarlo = load("CTSV.jld", "simdata")
-mcthetas = montecarlo[:,1:9]
-mcZs = montecarlo[:,10:end]
+montecarlo = load("CTSVall.jld", "simdata")
+mcthetas = montecarlo[:,1:10]
+mcZs = montecarlo[:,11:end]
 # process the montecarlo data
 mcZs = (mcZs .- mZs) ./ sZs
 preprocess = [ones(size(mcZs,1),1) mcZs]  * beta

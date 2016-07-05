@@ -17,7 +17,7 @@ Layer2Size = 40
 data = MemoryDataLayer(batch_size=batchsize, data=Array[X,Y])
 h1 = InnerProductLayer(name="ip1",neuron=Neurons.Tanh(), output_dim=Layer1Size, tops=[:pred1], bottoms=[:data])
 h2 = InnerProductLayer(name="ip2",neuron=Neurons.Tanh(), output_dim=Layer2Size, tops=[:pred2], bottoms=[:pred1])
-output = InnerProductLayer(name="aggregator", output_dim=9, tops=[:output], bottoms=[:pred2] )
+output = InnerProductLayer(name="aggregator", output_dim=6, tops=[:output], bottoms=[:pred2] )
 loss_layer = SquareLossLayer(name="loss", bottoms=[:output, :label])
 common_layers = [h1,h2,output]
 net = Net("train", backend, [data, common_layers, loss_layer])

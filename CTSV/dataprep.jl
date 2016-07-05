@@ -1,7 +1,7 @@
 using JLD
-traintest = load("CTSV.jld", "simdata")
-thetas = traintest[:,1:9]
-Zs = traintest[:,10:end]
+traintest = load("CTSVnojumps.jld", "simdata")
+thetas = traintest[:,1:6]
+Zs = traintest[:,7:end]
 trainsize = 500000
 mZs = mean(Zs,1)
 sZs = std(Zs,1)
