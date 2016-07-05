@@ -1,0 +1,13 @@
+This directory has the code for the continuous time stochastic volatility
+model.
+
+Code holds the code for simulating the model, which has used to create
+the training and testing data set CTSV.jld. This data set is
+too large to host on GitHub, either create a copy yourself,
+or write to michael.creel@uab.es for the copy used to train
+the net.
+
+Data holds the code for processing the SP500 data, to obtain the 
+real sample value of Zn
+
+

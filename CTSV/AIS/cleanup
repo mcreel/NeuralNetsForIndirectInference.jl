@@ -1,0 +1,14 @@
+#!/bin/bash
+mv SimpleModel.mod junk
+mv SimpleModel_steadystate.m junk2
+rm -R -f SimpleModel*
+mv junk SimpleModel.mod
+mv junk2 SimpleModel_steadystate.m
+rm state*
+rm parameterfile*
+if [ -f octave-core ]; then
+	rm octave-core
+fi
+if [ -f octave-workspace ]; then
+	rm octave-workspace
+fi

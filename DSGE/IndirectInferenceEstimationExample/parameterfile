@@ -1,0 +1,46 @@
+# Created by Octave 4.0.2, Thu Jun 30 13:04:39 2016 CEST <michael@pelican>
+# name: alpha
+# type: scalar
+0.33
+
+
+# name: beta
+# type: scalar
+0.99
+
+
+# name: delta
+# type: scalar
+0.025
+
+
+# name: gam
+# type: scalar
+2
+
+
+# name: rho1
+# type: scalar
+0.9
+
+
+# name: sigma1
+# type: scalar
+0.02
+
+
+# name: rho2
+# type: scalar
+0.7
+
+
+# name: sigma2
+# type: scalar
+0.01
+
+
+# name: nss
+# type: scalar
+0.3333333333333333
+
+

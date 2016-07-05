@@ -1,0 +1,12 @@
+DataPrep holds the code that prepares the real data, which are 349
+observations of ret, RV5, RV10, BV, MedRV for SP500, from
+01 Jan 2015 to 20 May 2016
+
+GenData simulates parameters and statistics, and was used
+to create the simulated data file CTSV.jld (550000 obsn).
+
+Common holds the code which is used in more than one place,
+including the code to simulate the model and the code to 
+compute the statistics
+
+

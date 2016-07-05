@@ -1,0 +1,4 @@
+The data preparation procedure:
+1. Take the columns from Ox-Man spreadsheet, save as SP500.ods
+2. Import into Gretl, and save as Octave: result is SP500.m 
+

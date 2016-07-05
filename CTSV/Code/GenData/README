@@ -1,0 +1,12 @@
+to prepare the training and testing data, run
+mpirun -np 31 octave-cli make_simdata
+
+that will generate the raw data file simdata.paramspace
+
+then run
+
+octave-cli --eval convert
+julia convert.jl
+
+the result will be the training/testing data CTSV.jld
+the first 9 cols are the params, the rest are stats

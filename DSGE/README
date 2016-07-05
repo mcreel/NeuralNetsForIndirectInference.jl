@@ -1,0 +1,21 @@
+300_40.jl is the Mocha input file which trains the 
+net.
+
+snapshot-*.jld is the result of training the 
+net, it has the hidden parameter values for
+the last few training iterations
+
+dataprep.jl does pre-processing and scaling
+
+Analyze.jl gets the final fit from the trained net,
+and computes, RMSE, etc., plus does graphics.
+
+The data set dsge.jld is too large to store on github,
+to obtain it, contact michael.creel@uab.cat
+The data set is created using the make_simdata.m file 
+in the GenData directory of the archive
+https://github.com/mcreel/ABCDSGE
+
+For an example of how the output of the net can be used
+for very quick estimation, see the directory
+EstimationExample
