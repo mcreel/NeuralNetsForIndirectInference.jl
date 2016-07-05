@@ -87,4 +87,3 @@ if dovarcov
 end   
 
 
-

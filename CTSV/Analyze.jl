@@ -3,7 +3,7 @@ using JLD
 #plt = PyPlot
 
 # load trained parameters, and separate them out
-d = load("300_40_snapshots/snapshot-200000.jld")
+d = load("TrainedNetNoJumps.jld")
 params = d["params_all"]
 h1 = params["ip1"]
 alpha1 = h1[2]
@@ -19,9 +19,9 @@ beta3 = output[1]
 # way done before training
 include("dataprep.jl")
 # load montecarlo data
-montecarlo = load("CTSVall.jld", "simdata")
-mcthetas = montecarlo[:,1:10]
-mcZs = montecarlo[:,11:end]
+montecarlo = load("CTSVnojumps.jld", "simdata")
+mcthetas = montecarlo[:,1:6]
+mcZs = montecarlo[:,7:end]
 # process the montecarlo data
 mcZs = (mcZs .- mZs) ./ sZs
 preprocess = [ones(size(mcZs,1),1) mcZs]  * beta
