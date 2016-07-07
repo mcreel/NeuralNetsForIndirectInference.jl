@@ -50,17 +50,11 @@ if node
     thetas = zeros(reps_per_node, nparams);
     Zs = zeros(reps_per_node, size(Zn,2));
 	for i = 1:reps_per_node;
-		ok = false;
-        while !ok
-            if rand < mixture 
-                thetass = sample_from_prior();
-            else	
-                thetass = sample_from_AIS(particles(:,1:nparams));
-            endif
-            ok = (0<thetass(2,:)) & (thetass(2,:)< 1) & (0 < thetass(3,:)) & (thetass(3,:) < 1) & (0<thetass(5,:))  & (thetass(5,:)< 1) & (0<thetass(7,:)) & (thetass(7,:) < 1);
-        endwhile
-        thetass(6,:) = abs(thetass(6,:));
-        thetass(8,:) = abs(thetass(8,:));
+        if rand < mixture 
+            thetass = sample_from_prior();
+        else	
+            thetass = sample_from_AIS(particles(:,1:nparams));
+        endif
         thetass = keep_in_support(thetass);
         thetas(i,:) = thetass';
         asbil_theta = thetass;

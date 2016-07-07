@@ -1,13 +1,5 @@
-This replaces the AIS selected stats with the NN stats
+FOR CTSV
 
-The steps here are
-1. run DSGE_tune_from_prior.m to get the initial bandwidths.
- to get the indices, load the output file, then do
- [junk ind]=min(rmses') or 
- [junk ind] = min(abs(cicoverage'-0.9))
-
-2. run DSGE_montecarlo.m to get the ABC estimation results using initial
-bandwidths
-3. run DSGE_tune_local.m to get the second stage, local bandwidths. (see step
-1 instructions)
-4- edit and re-run DSGE_montecarlo.m to use the second stage bandwidths 
+* get the CTSVnojumps.jl, and select out neighbors to start AIS
+* tune bandwidths locally by sampling at NN estimate
+* then do final estimation

@@ -53,8 +53,8 @@ Zn = Zn(1:6,:);
 s = abs(theta);
 parameters;
 lb_ub = lb_ub(1:6,:);
-lb = theta - 0.3*abs(theta);
-ub = theta + 0.3*abs(theta);
+lb = theta - 0.1*abs(theta);
+ub = theta + 0.1*abs(theta);
 nt = 3;
 ns = 3;
 rt = 0.9; # careful - this is too low for many problems

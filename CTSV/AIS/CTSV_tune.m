@@ -1,5 +1,5 @@
 DO_NN = true;
-DO_PDM = true;
+DO_PDM = false;
 DO_LOCAL = true;
 
 if DO_LOCAL
@@ -12,23 +12,23 @@ mc_reps = 200; % number of MC reps
 nworkers = 25;  % number of worker MPI ranks
 
 SetupAIS;
+setupmpi;
 
 % design
 parameters; % loaded from Common to ensure sync with Gendata
-lb = lb_param_ub(:,1);
-ub = lb_param_ub(:,3);
+lb = lb_ub(:,1);
+ub = lb_ub(:,2);
 prior_params = [lb ub];
-theta0 = lb_param_ub(:,2); % original form
+load Zn20152016;
+theta0 = NNstat(Zn')'; # use the NN estimate as true for tuning bandwidths
 nparams = rows(theta0);
-
 setupmpi; % sets comm world, nodes, node, etc.
-asbil_theta = theta0; setupdynare; % sets structures and RNG for simulations
-load selected;
+asbil_theta = theta0; % sets structures and RNG for simulations
+selected = ones(size(theta0)); % easy way not to deal with modification
 asbil_selected = selected;
 MPI_Barrier(CW);
+
 warning ( "off") ;
-
-
 % number of particles for each node
 particles_per_node = floor(nparticles/(nodes-1));
 
@@ -38,52 +38,30 @@ if !node
     % which is a reasonably large number set of
     % [theta  Z] where theta is a draw from prior
     % and Z is the output of aux_stat
-    load simdata.paramspace;
+    load simdata;
     USERthetaZ = clean_data(simdata);
     % containers
     makebandwidths;
     errors = zeros(mc_reps, nparams,nbw);
-    in_ci = zeros(9,nbw);
-    rmses = zeros(9,nbw);
+    in_ci = zeros(nparams,nbw);
+    rmses = zeros(nparams,nbw);
     cicoverage = rmses;
 endif
 
 for rep = 1:mc_reps
     % the 'true' Zn
-    if node==1 % simulate on node1 (can't do it on 0, no *.modfile
-        % next line for tuning to true theta0
-        %asbil_theta = theta0;
-        % next two lines for tuning to draws from prior
-        if DO_LOCAL
-            if rep==1
-                    load tuned_from_prior.out;
-            endif
-            i = randi(size(thetahatsLL,1));
-            asbil_theta = thetahatsLL(i,:)';
-        else
-            asbil_theta = sample_from_prior();
-        endif
-        theta0 = asbil_theta;
+    if node==1 % simulate on node 1
+        % we tune to the NN output estimate as true
+        asbil_theta = theta0;
         ok = false;
         while !ok    
             USERsimulation;
             Zn = aux_stat(data);
             ok = Zn(1,:) != -1000;
         endwhile	
-        realdata = data;
-        if DO_NN
-            Zn = NNstat(Zn');
-        else
-            Zn = Zn(asbil_selected,:)';    
-        endif
-        if DO_PDM
-            pdm = makepdm(asbil_theta', realdata);
-            pdm = pdm - pdm; % for real data, it's zero
-            Zn = [Zn pdm];
-            n_pdm = size(pdm,2);
-        else
-            n_pdm = 0;    
-        endif 
+        Zn = NNstat(Zn');
+        n_pdm = 0;    
+        realdata = 0; % just a dummy, to use the code
         for i = 2:nodes-1
             MPI_Send(Zn, i, mytag, CW);
             MPI_Send(realdata, i, mytag+1, CW);
@@ -106,7 +84,7 @@ for rep = 1:mc_reps
     endif 
    
     MPI_Barrier(CW);    
-    
+  
     % call the algorithm that gets AIS particles
     if ! node
         tic;
@@ -153,7 +131,7 @@ for rep = 1:mc_reps
             in10 = ((theta0 > r.c') & (theta0 < r.d'));
             in_ci(:,bwiter) = in_ci(:,bwiter) + in10;
             errors(rep,:,bwiter) = (thetahat'- theta0');
-            rmse = zeros(9,1);
+            rmse = zeros(nparams,1);
             if rep > 1
                 printf("bandwidth = %f\n", bandwidth);    
                 contrib = errors(1:rep,:,bwiter);
@@ -166,15 +144,12 @@ for rep = 1:mc_reps
                 rmse = sqrt(mse);
                 clabels = char("bias","rmse");
                 rlabels = char(
+                "mu0",
+                "mu1",
                 "alpha",
-                "beta",
-                "delta",
-                "gam",
-                "rho1",
-                "sigma1",
-                "rho2",
-                "sigma2",
-                "nss"
+                "kappa",
+                "sigma",
+                "rho"
                 );
                 printf("\n\nEstimation results (LL mean): rep %d\n", rep);
                 prettyprint([b ; rmse]', rlabels, clabels);
@@ -191,6 +166,7 @@ if !node
     [junk, bwselect] = min(rmses');
     [junk, bwselectCI] = min(abs(cicoverage'-0.9));
     save SelectedBandwidths bwselect bwselectCI;
-end    
+end
+
 if not(MPI_Finalized) MPI_Finalize; endif
 

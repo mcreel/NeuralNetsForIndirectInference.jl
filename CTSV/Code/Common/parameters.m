@@ -1,5 +1,4 @@
 % the "true" values are the 2008-2011 estimates from the JEF paper
-#{
 # all
 lb_ub = [
 -0.1    0.1     % mu0
@@ -14,8 +13,8 @@ lb_ub = [
 0.0     5       % sig_j
 0       0       % sig_eps 
 ];
-#}
 
+#{
 # no jumps
 lb_ub = [
 -0.1    0.1     % mu0
@@ -31,3 +30,4 @@ lb_ub = [
 0       0       % sig_eps 
 ];
 
+#}
