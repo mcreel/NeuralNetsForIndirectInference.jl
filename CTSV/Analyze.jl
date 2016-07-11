@@ -1,6 +1,6 @@
 using JLD
-#using PyPlot
-#plt = PyPlot
+using PyPlot
+plt = PyPlot
 
 # load trained parameters, and separate them out
 d = load("TrainedNetAll.jld")
@@ -70,10 +70,10 @@ writedlm("sErrors", sErrors)
 #alpha = ["alpha", "beta", "delta", "gamma","rho_z","sig_z","rho_eta","sig_eta","nss"]
 
 # this is the importance measure used in the paper
-#z = maximum(abs(beta1),2)
-#cax = matshow(z', interpolation="nearest")
-#colorbar(cax)
-#xlabels = [string(i) for i=1:40]
-#xticks(0:39, xlabels);
-#yticks(0:8,alpha)
+z = maximum(abs(beta1),2)
+cax = matshow(z', interpolation="nearest")
+colorbar(cax)
+xlabels = [string(i) for i=1:56]
+xticks(0:55, xlabels);
+yticks(0:5,alpha)
 
