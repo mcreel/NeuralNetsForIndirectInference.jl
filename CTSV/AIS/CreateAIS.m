@@ -29,7 +29,7 @@ function theta_s = sample_from_particles(particles, delta, lb, ub)
 	while !ok
 		trial = theta_s;
        	trial(:,j) = trial(:,j) + delta(:,j).*randn();
-		ok = all(trial >= lb(1:6,:)') & all(trial <= ub(1:6,:)');
+		ok = all(trial >= lb') & all(trial <= ub');
 	endwhile	
 	theta_s = trial';
 endfunction
@@ -129,7 +129,7 @@ else % frontend
                 oldparticles = particles(1,:);
                 scale = std(particles(:,nparams+1:end));
             endif
-	        [particles, dist] = select_particles(Zn, oldparticles, particles, keep, scale);
+            [particles, dist] = select_particles(Zn, oldparticles, particles, keep, scale);
         endif
 		if verbose
 			printf("Iteration %d\n", iter);

@@ -1,5 +1,10 @@
-FOR CTSV
+FOR CTSV ABC estimation using the neural net output as the statistic
 
-* get the CTSVnojumps.jl, and select out neighbors to start AIS
-* tune bandwidths locally by sampling at NN estimate
-* then do final estimation
+* run ConvertSimdata.jl to write out the data simulated from the prior in ASCII
+form, so Octave can use it to start the adaptive importance sampling
+* from octave, load the data and save it in binary, to speed things up
+   octave-cli --eval "load simdata; save -binary simdata simdata"
+* tune bandwidths using CTSV_tune.m
+  mpirun -np 26 octave-cli --eval CTSV_tune 
+* do the estimation using CTSV_estimate.m
+  mpirun -np 26 octave-cli --eval CTSV_estimate

@@ -37,6 +37,7 @@ dovarcov = true;
 S = 50; % number of simulations to compute Ehat(Zs)
 load Zn20152016;
 Zn = NNstat(Zn')';
+Zn
 % get RNG state to control chatter
 RNGstate = rand("state");
 % start II loop here

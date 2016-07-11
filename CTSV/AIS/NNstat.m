@@ -22,6 +22,7 @@ function fit = NNstat(Z)
         h2 = tanh(alpha2' + h1*beta2);
         fit = alpha3' + h2*beta3;
         fit = fit.*sErrors + preprocess;
+        fit = fit(:,1:6);
         parameters;
         lb = lb_ub(1:6,1)';
         ub = lb_ub(1:6,2)';

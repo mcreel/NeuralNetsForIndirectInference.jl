@@ -16,11 +16,12 @@ setupmpi;
 
 % design
 parameters; % loaded from Common to ensure sync with Gendata
-lb = lb_ub(:,1);
-ub = lb_ub(:,2);
+lb = lb_ub(1:6,1);
+ub = lb_ub(1:6,2);
 prior_params = [lb ub];
 load Zn20152016;
 theta0 = NNstat(Zn')'; # use the NN estimate as true for tuning bandwidths
+theta0 = theta0(1:6,:);
 nparams = rows(theta0);
 setupmpi; % sets comm world, nodes, node, etc.
 asbil_theta = theta0; % sets structures and RNG for simulations
@@ -39,6 +40,7 @@ if !node
     % [theta  Z] where theta is a draw from prior
     % and Z is the output of aux_stat
     load simdata;
+    simdata = simdata(:,[1:6 11:end]);   % drop the 4 jump parameters, not identified
     USERthetaZ = clean_data(simdata);
     % containers
     makebandwidths;
@@ -149,7 +151,11 @@ for rep = 1:mc_reps
                 "alpha",
                 "kappa",
                 "sigma",
-                "rho"
+                "rho",
+                "lam0",
+                "lam1",
+                "muJ",
+                "sigJ"
                 );
                 printf("\n\nEstimation results (LL mean): rep %d\n", rep);
                 prettyprint([b ; rmse]', rlabels, clabels);
