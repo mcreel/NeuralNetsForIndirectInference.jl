@@ -1,0 +1,7 @@
+This directory has code which attempts to estimate the CTSV model
+using extremum estimation Indirect Inference. It does not work 
+well, the objective function has many small wells in the neighborhood
+of the global min, which can't be found even with simulated annealing.
+Note how the obj. value at min is not zero (though it's close) and how
+estimated st. errors are very small (derivatives of moments are large
+in abs. value). All of this indicates that true min is not found.

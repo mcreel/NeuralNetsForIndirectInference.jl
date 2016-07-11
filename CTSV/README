@@ -1,5 +1,5 @@
 This directory has the code for the continuous time stochastic volatility
-model.
+model discussed in Section 5 of the paper.
 
 Code holds the code for simulating the model, which has used to create
 the training and testing data set CTSV.jld. This data set is
@@ -8,6 +8,14 @@ or write to michael.creel@uab.es for the copy used to train
 the net.
 
 Data holds the code for processing the SP500 data, to obtain the 
-real sample value of Zn
+real sample value of Zn. The S&P 500 data was obtained from the 
+Ox-Man realized library, at http://realized.oxford-man.ox.ac.uk/.
+The data used is from Jan. 2015 - May 2016.
 
+IndirectInferenceEstimationExample holds Octave code that attempts
+to do classical indirect inference, using the net's output. This
+does not work well, the objective function is too irregular.
+
+AIS holds code for ABC estimation, using the net's output as the
+statistic. This does work well.
 
