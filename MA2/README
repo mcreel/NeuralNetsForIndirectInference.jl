@@ -1,10 +1,9 @@
 This is the code for the MA(2) example.
 
 make_simdata.jl generates the data file 
-To do this, execute "julia make_simdata.jl"
-
 100_20.jl is the Mocha input file to train the net
-
 Analyze.jl gets the RMSEs, etc., and makes the plot
+
+Just run the three of them in sequence to replicate results in the paper.
 
  
