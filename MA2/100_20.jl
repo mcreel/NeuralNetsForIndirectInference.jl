@@ -5,7 +5,7 @@ using MXNet
 include("dataprep.jl") # creates X,Y,XT,YT, the training and testing inputs and output
 
 # how to set up data providers using data in memory
-batchsize = 256 # can adjust this later, but must be defined now for next line
+batchsize = 2048 # can adjust this later, but must be defined now for next line
 trainprovider = mx.ArrayDataProvider(:data => X, batch_size=batchsize, shuffle=false, :label => Y)
 evalprovider = mx.ArrayDataProvider(:data => XT, batch_size=batchsize, shuffle=false, :label => YT)
 
@@ -25,23 +25,46 @@ cost = mx.LinearRegressionOutput(data = net, label=label)
 model = mx.FeedForward(cost, context=mx.cpu())
 
 # set up the optimizer: select one, explore parameters, if desired
-optimizer = mx.SGD(lr=0.01, momentum=0.9, weight_decay=0.00001)
-#optimizer = mx.ADAM()
+#optimizer = mx.SGD(lr=0.01, momentum=0.9, weight_decay=0.00001)
+optimizer = mx.ADAM()
 
 # train, reporting loss for training and evaluation sets
 # initial training with small batch size, to get to a good neighborhood
 batchsize = 128
-mx.fit(model, optimizer, initializer=mx.NormalInitializer(0.0,0.1), eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 500)
+mx.fit(model, optimizer, initializer=mx.NormalInitializer(0.0,0.1), eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 2)
 # more training with larger sample
 batchsize = 2048
-mx.fit(model, optimizer, eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 500)
+mx.fit(model, optimizer, eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 2)
 
-#=
 # obtain predictions
-plotprovider = mx.ArrayDataProvider(:data => ValidationInput, :label => ValidationOutput)
+plotprovider = mx.ArrayDataProvider(:data => XT, :label => YT)
 fit = mx.predict(model, plotprovider)
-plot(ValidationOutput,fit',".")
-xlabel("true")
-ylabel("predicted")
-title("outputs: true versus predicted. 45º line is what we hope for")
-=#    
+fit = fit'
+
+# compute RMSE using the testing data
+trainsize = 900000
+testsize = 100000
+thetas = thetas[trainsize+1:trainsize+testsize,:]
+preprocess = preprocess[trainsize+1:trainsize+testsize,:]
+error = thetas - (preprocess + sErrors.*fit)
+bias = mean(error,1)
+mse = mean(error.^2,1)
+rmse = sqrt(mse)
+
+# get the first layer parameters for influence analysis
+beta = copy(model.arg_params[:fullyconnected0_weight])
+#figure(1)
+#cax1 = scatter(thetas[:,1],preprocess[:,1]+fit[:,1])
+#xlabel("theta1")
+#ylabel("fitted theta1")
+#figure(2)
+#cax2 = scatter(thetas[:,2],preprocess[:,2]+fit[:,2])
+#xlabel("theta2")
+#ylabel("fitted theta2")
+
+@printf("    bias      rmse       mse\n")
+for i=1:size(bias,2)
+    @printf("%8.5f  %8.5f  %8.5f\n", bias[i], rmse[i], mse[i])
+end
+
+
