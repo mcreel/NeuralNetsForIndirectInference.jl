@@ -1,7 +1,7 @@
 #=
 The training script for the 100-20 node MLP for the MA2 model
 =#
-using MXNet
+using MXNet,PyPlot
 include("dataprep.jl") # creates X,Y,XT,YT, the training and testing inputs and output
 
 # how to set up data providers using data in memory
@@ -31,10 +31,10 @@ optimizer = mx.ADAM()
 # train, reporting loss for training and evaluation sets
 # initial training with small batch size, to get to a good neighborhood
 batchsize = 128
-mx.fit(model, optimizer, initializer=mx.NormalInitializer(0.0,0.1), eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 2)
+mx.fit(model, optimizer, initializer=mx.NormalInitializer(0.0,0.1), eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 100)
 # more training with larger sample
 batchsize = 2048
-mx.fit(model, optimizer, eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 2)
+mx.fit(model, optimizer, eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 10)
 
 # obtain predictions
 plotprovider = mx.ArrayDataProvider(:data => XT, :label => YT)
@@ -46,25 +46,32 @@ trainsize = 900000
 testsize = 100000
 thetas = thetas[trainsize+1:trainsize+testsize,:]
 preprocess = preprocess[trainsize+1:trainsize+testsize,:]
-error = thetas - (preprocess + sErrors.*fit)
+fit = preprocess + sErrors.*fit
+error = thetas - fit
+# compute RMSE
 bias = mean(error,1)
 mse = mean(error.^2,1)
 rmse = sqrt(mse)
-
-# get the first layer parameters for influence analysis
-beta = copy(model.arg_params[:fullyconnected0_weight])
-#figure(1)
-#cax1 = scatter(thetas[:,1],preprocess[:,1]+fit[:,1])
-#xlabel("theta1")
-#ylabel("fitted theta1")
-#figure(2)
-#cax2 = scatter(thetas[:,2],preprocess[:,2]+fit[:,2])
-#xlabel("theta2")
-#ylabel("fitted theta2")
-
 @printf("    bias      rmse       mse\n")
 for i=1:size(bias,2)
     @printf("%8.5f  %8.5f  %8.5f\n", bias[i], rmse[i], mse[i])
 end
 
+# get the first layer parameters for influence analysis
+beta = copy(model.arg_params[:fullyconnected0_weight])
+z = maximum(abs(beta),2);
+cax3 = matshow(z', interpolation="nearest")
+colorbar(cax3)
+xlabels = [string(i) for i=1:11]
+xticks(0:10, xlabels)
+
+figure()
+cax1 = scatter(thetas[:,1],fit[:,1])
+xlabel("theta1")
+ylabel("fitted theta1")
+
+figure()
+cax2 = scatter(thetas[:,2], fit[:,2])
+xlabel("theta2")
+ylabel("fitted theta2")
 
