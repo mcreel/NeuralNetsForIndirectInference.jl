@@ -2,11 +2,11 @@
 
 This repository provides the code to replicate the results in "Neural Nets for Indirect Inference" (the paper is in the file NNII.pdf, in this repo), by Michael Creel.
 
-Release v1.0 works with julia v0.4.
+The current code uses MXNet.jl, and runs with julia v0.5 or v0.4.
 
-The code currently does not work with julia v0.5. This will be fixed shortly.
+Release v1.0 uses the Mocha.jl package, and works with julia v0.4.
 
-The code is a mixture of Julia and Octave. The julia code requires Mocha.jl and JLD.jl. The Octave code requires support files available at https://github.com/mcreel/Econometrics.
+The code is a mixture of Julia and Octave. The julia code requires MXNet.jl and JLD.jl (and PyPlot.jl for plots). The Octave code requires support files available at https://github.com/mcreel/Econometrics.
 
 Examples include a small dynamic stochastic general equilibirum (DSGE) model, a simple MA(2) model, and and example of estimation of a continuous time jump diffusion model using S&P500 data for Jan. 2015 - May 2016.
 
