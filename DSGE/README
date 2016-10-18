@@ -3,10 +3,7 @@ It requires the MXNet, JLD and PyPlot packages.
 
 dataprep.jl does pre-processing and scaling
 
-The data set dsge.jld is too large to store on github,
-to obtain it, contact michael.creel@uab.cat
-The data set is created using the make_simdata.m file 
-in the GenData directory of the archive
-https://github.com/mcreel/ABCDSGE
+The data set dsge.jld is too large to store on github, to obtain it, contact michael.creel@uab.cat
+The data set is created using the make_simdata.m file, in the GenData directory of the archive https://github.com/mcreel/ABCDSGE
 
-For an example of how the output of the net can be used for very quick estimation, see the directory SimpleDirectEstimation
+For an example of how the output of the net can be used for very quick estimation, see the directory SimpleDirectEstimationExample
