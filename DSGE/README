@@ -9,6 +9,4 @@ The data set is created using the make_simdata.m file
 in the GenData directory of the archive
 https://github.com/mcreel/ABCDSGE
 
-For an example of how the output of the net can be used
-for very quick estimation, see the directory
-EstimationExample
+For an example of how the output of the net can be used for very quick estimation, see the directory SimpleDirectEstimation
