@@ -10,7 +10,8 @@ Zs = (Zs .- mZs) ./ sZs
 x = [ones(size(Zs,1)) Zs]
 beta = x\thetas
 # least squares errors, both train and test, using coefficients only from train
-errors = thetas - x*beta
+preprocess = x*beta
+errors = thetas - preprocess
 # standardize the inputs using stds of training data
 sErrors = std(errors,1)
 errors = errors ./ sErrors
@@ -22,3 +23,11 @@ x = 0
 thetas = 0
 traintest = 0
 Zs = 0
+# prepare the montecarlo data the same way
+montecarlo = load("dsge.jld", "montecarlo")
+YMC = montecarlo[:,1:9]'
+mcZs = montecarlo[:,10:end]
+XMC = (mcZs .- mZs) ./ sZs
+preprocess = [ones(size(mcZs,1),1) XMC]  * beta
+XMC = XMC'
+

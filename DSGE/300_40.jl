@@ -1,41 +1,69 @@
-# set up environment
-ENV["MOCHA_USE_CUDA"] = "true"
-#ENV["MOCHA_USE_NATIVE_EXT"] = "true"
-using Mocha,JLD
-srand(12345678)
-backend = DefaultBackend()
-init(backend)
-snapshot_dir = "300_40_snapshots"
-batchsize = 1024
-maxiters = 200000
-# Load and pre-process the data
-include("dataprep.jl")
-# specify sizes of layers
-Layer1Size = 300
-Layer2Size = 40
-# create the network
-data = MemoryDataLayer(batch_size=batchsize, data=Array[X,Y])
-h1 = InnerProductLayer(name="ip1",neuron=Neurons.Tanh(), output_dim=Layer1Size, tops=[:pred1], bottoms=[:data])
-h2 = InnerProductLayer(name="ip2",neuron=Neurons.Tanh(), output_dim=Layer2Size, tops=[:pred2], bottoms=[:pred1])
-output = InnerProductLayer(name="aggregator", output_dim=9, tops=[:output], bottoms=[:pred2] )
-loss_layer = SquareLossLayer(name="loss", bottoms=[:output, :label])
-common_layers = [h1,h2,output]
-net = Net("dsge-train", backend, [data, common_layers, loss_layer])
-# create the validation network
-datatest = MemoryDataLayer(batch_size=50000, data=Array[XT,YT])
-accuracy = SquareLossLayer(name="acc", bottoms=[:output, :label])
-net_test = Net("dsge-test", backend, [datatest, common_layers, accuracy])
-test_performance = ValidationPerformance(net_test)
-# Solve
-lr_policy=LRPolicy.Inv(0.01, 0.001, 0.8)
-method = SGD()
-params = make_solver_parameters(method, regularization_type="L1", regu_coef=0.0001, mom_policy=MomPolicy.Fixed(0.9), max_iter=maxiters, lr_policy=lr_policy, load_from=snapshot_dir)
-solver = Solver(method, params)
-add_coffee_break(solver, TrainingSummary(), every_n_iter=1000)
-add_coffee_break(solver, test_performance, every_n_iter=1000)
-add_coffee_break(solver, Snapshot(snapshot_dir), every_n_iter=1000)
-solve(solver, net)
-Mocha.dump_statistics(solver.coffee_lounge, get_layer_state(net, "loss"), true)
-destroy(net)
-destroy(net_test)
-shutdown(backend)
+#=
+The training script for the 100-20 node MLP for the MA2 model
+=#
+using MXNet,PyPlot
+include("dataprep.jl") # creates X,Y,XT,YT, the training and testing inputs and output
+
+# how to set up data providers using data in memory
+batchsize = 2048 # can adjust this later, but must be defined now for next line
+trainprovider = mx.ArrayDataProvider(:data => X, batch_size=batchsize, shuffle=false, :label => Y)
+evalprovider = mx.ArrayDataProvider(:data => XT, batch_size=batchsize, shuffle=false, :label => YT)
+
+# size of layers
+layer1 = 300
+layer2 = 40
+outputs = 9
+
+# set up 2 layer MLP with 2 outputs
+data = mx.Variable(:data)
+label = mx.Variable(:label)
+net  = @mx.chain    mx.FullyConnected(data = data, num_hidden=layer1) =>
+                    mx.Activation(act_type=:tanh) =>
+                    mx.FullyConnected(num_hidden=layer2) =>
+                    mx.Activation(act_type=:tanh) =>
+                    mx.FullyConnected(num_hidden=outputs)        
+
+# squared error loss is appropriate for regression, don't change
+cost = mx.LinearRegressionOutput(data = net, label=label)
+
+# final model definition, don't change, except if using gpu
+model = mx.FeedForward(cost, context=mx.cpu())
+
+# set up the optimizer: select one, explore parameters, if desired
+#optimizer = mx.SGD(lr=0.01, momentum=0.9, weight_decay=0.00001)
+optimizer = mx.ADAM()
+
+# train, reporting loss for training and evaluation sets
+# initial training with small batch size, to get to a good neighborhood
+batchsize = 128
+mx.fit(model, optimizer, initializer=mx.NormalInitializer(0.0,0.1), eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 10)
+# more training with larger sample
+batchsize = 2048
+mx.fit(model, optimizer, eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 10)
+
+# obtain predictions
+plotprovider = mx.ArrayDataProvider(:data => XMC, :label => YMC)
+fit = mx.predict(model, plotprovider)
+fit = fit'
+fit = preprocess + sErrors.*fit # back to original location and scale
+# keep the fits inside support
+fit[:,6] = fit[:,6].*(fit[:,6].> 0.0)
+fit[:,8] = fit[:,8].*(fit[:,8].> 0.0)
+# compute RMSE
+error = YMC' - fit
+bias = mean(error,1)
+mse = mean(error.^2,1)
+rmse = sqrt(mse)
+@printf("    bias      rmse       mse\n")
+for i=1:size(bias,2)
+    @printf("%8.5f  %8.5f  %8.5f\n", bias[i], rmse[i], mse[i])
+end
+
+# get the first layer parameters for influence analysis
+beta = copy(model.arg_params[:fullyconnected0_weight])
+z = maximum(abs(beta),2);
+cax3 = matshow(z', interpolation="nearest")
+colorbar(cax3)
+xlabels = [string(i) for i=1:40]
+xticks(0:39, xlabels)
+
