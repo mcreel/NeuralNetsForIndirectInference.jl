@@ -1,9 +1,14 @@
 This is the code for the MA(2) example.
 
 make_simdata.jl generates the data file 
-100_20.jl is the Mocha input file to train the net
-Analyze.jl gets the RMSEs, etc., and makes the plot
+100_20.jl trains the net, computes RMSEs, and makes the plots
 
-Just run the three of them in sequence to replicate results in the paper.
+Just run the two in sequence to replicate results in the paper.
+
+The MXNet, JLD and PyPlot packages for Julia are require.
+
+Tested with Julia v0.5.
+
+write to michael.creel@uab.cat if you have any problems.
 
  

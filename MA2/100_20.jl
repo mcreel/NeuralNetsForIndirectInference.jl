@@ -1,44 +1,77 @@
-# set up environment
-ENV["MOCHA_USE_CUDA"] = "true"
-#ENV["MOCHA_USE_NATIVE_EXT"] = "true"
-using Mocha
-srand(12345678)
-backend = DefaultBackend()
-init(backend)
-snapshot_dir = "100_20_snapshots"
-# Load the data and pre-process it
-include("dataprep.jl")
-# Define network
-Layer1Size = 100
-Layer2Size = 20
-batchsize = 256
-maxiters = 200000
-# create the network
-data = MemoryDataLayer(batch_size=batchsize, data=Array[X,Y])
-h1 = InnerProductLayer(name="hidden1",neuron=Neurons.Tanh(), output_dim=Layer1Size, tops=[:pred1], bottoms=[:data])
-h2 = InnerProductLayer(name="hidden2",neuron=Neurons.Tanh(), output_dim=Layer2Size, tops=[:pred2], bottoms=[:pred1])
-output = InnerProductLayer(name="output", output_dim=2, tops=[:output], bottoms=[:pred2] )
-loss_layer = SquareLossLayer(name="loss", bottoms=[:output, :label])
-common_layers = [h1,h2,output]
-net = Net("ma2-train", backend, [data, common_layers, loss_layer])
-# create the validation network
-datatest = MemoryDataLayer(batch_size=100000, data=Array[XT,YT])
-accuracy = SquareLossLayer(name="acc", bottoms=[:output, :label])
-net_test = Net("ma2-test", backend, [datatest, common_layers, accuracy])
-test_performance = ValidationPerformance(net_test)
-############################################################
-# Solve
-############################################################
-lr_policy=LRPolicy.Inv(0.01, 0.001, 0.8)
-method = SGD()
-params = make_solver_parameters(method, regularization_type="L1", regu_coef=0.00001, mom_policy=MomPolicy.Fixed(0.9), max_iter=maxiters, lr_policy=lr_policy, load_from=snapshot_dir)
-solver = Solver(method, params)
-add_coffee_break(solver, TrainingSummary(), every_n_iter=10000)
-add_coffee_break(solver, Snapshot(snapshot_dir), every_n_iter=10000)
-add_coffee_break(solver, test_performance, every_n_iter=10000)
-# link the decay-on-validation policy with the actual performance validator
-solve(solver, net)
-Mocha.dump_statistics(solver.coffee_lounge, get_layer_state(net, "loss"), true)
-destroy(net)
-destroy(net_test)
-shutdown(backend)
+#=
+The training script for the 100-20 node MLP for the MA2 model
+=#
+using MXNet,PyPlot
+include("dataprep.jl") # creates X,Y,XT,YT, the training and testing inputs and output
+
+# how to set up data providers using data in memory
+batchsize = 2048 # can adjust this later, but must be defined now for next line
+trainprovider = mx.ArrayDataProvider(:data => X, batch_size=batchsize, shuffle=false, :label => Y)
+evalprovider = mx.ArrayDataProvider(:data => XT, batch_size=batchsize, shuffle=false, :label => YT)
+
+# set up 2 layer MLP with 2 outputs
+data = mx.Variable(:data)
+label = mx.Variable(:label)
+net  = @mx.chain    mx.FullyConnected(data = data, num_hidden=100) =>
+                    mx.Activation(act_type=:tanh) =>
+                    mx.FullyConnected(num_hidden=20) =>
+                    mx.Activation(act_type=:tanh) =>
+                    mx.FullyConnected(num_hidden=2)        
+
+# squared error loss is appropriate for regression, don't change
+cost = mx.LinearRegressionOutput(data = net, label=label)
+
+# final model definition, don't change, except if using gpu
+model = mx.FeedForward(cost, context=mx.cpu())
+
+# set up the optimizer: select one, explore parameters, if desired
+#optimizer = mx.SGD(lr=0.01, momentum=0.9, weight_decay=0.00001)
+optimizer = mx.ADAM()
+
+# train, reporting loss for training and evaluation sets
+# initial training with small batch size, to get to a good neighborhood
+batchsize = 128
+mx.fit(model, optimizer, initializer=mx.NormalInitializer(0.0,0.1), eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 100)
+# more training with larger sample
+batchsize = 2048
+mx.fit(model, optimizer, eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 10)
+
+# obtain predictions
+plotprovider = mx.ArrayDataProvider(:data => XT, :label => YT)
+fit = mx.predict(model, plotprovider)
+fit = fit'
+
+# compute RMSE using the testing data
+trainsize = 900000
+testsize = 100000
+thetas = thetas[trainsize+1:trainsize+testsize,:]
+preprocess = preprocess[trainsize+1:trainsize+testsize,:]
+fit = preprocess + sErrors.*fit
+error = thetas - fit
+# compute RMSE
+bias = mean(error,1)
+mse = mean(error.^2,1)
+rmse = sqrt(mse)
+@printf("    bias      rmse       mse\n")
+for i=1:size(bias,2)
+    @printf("%8.5f  %8.5f  %8.5f\n", bias[i], rmse[i], mse[i])
+end
+
+# get the first layer parameters for influence analysis
+beta = copy(model.arg_params[:fullyconnected0_weight])
+z = maximum(abs(beta),2);
+cax3 = matshow(z', interpolation="nearest")
+colorbar(cax3)
+xlabels = [string(i) for i=1:11]
+xticks(0:10, xlabels)
+
+figure()
+cax1 = scatter(thetas[:,1],fit[:,1])
+xlabel("theta1")
+ylabel("fitted theta1")
+
+figure()
+cax2 = scatter(thetas[:,2], fit[:,2])
+xlabel("theta2")
+ylabel("fitted theta2")
+
