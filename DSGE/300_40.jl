@@ -36,7 +36,7 @@ optimizer = mx.ADAM()
 # train, reporting loss for training and evaluation sets
 # initial training with small batch size, to get to a good neighborhood
 batchsize = 128
-mx.fit(model, optimizer, initializer=mx.NormalInitializer(0.0,0.1), eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 10)
+mx.fit(model, optimizer, initializer=mx.NormalInitializer(0.0,0.1), eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 100)
 # more training with larger sample
 batchsize = 2048
 mx.fit(model, optimizer, eval_metric=mx.MSE(), trainprovider, eval_data=evalprovider, n_epoch = 10)

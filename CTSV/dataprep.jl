@@ -10,7 +10,8 @@ Zs = (Zs .- mZs) ./ sZs
 x = [ones(size(Zs,1)) Zs]
 beta = x\thetas
 # least squares errors, both train and test, using coefficients only from train
-errors = thetas - x*beta
+preprocess = x*beta
+errors = thetas - preprocess
 # standardize the inputs using stds of training data
 sErrors = std(errors,1)
 errors = errors ./ sErrors
@@ -18,7 +19,5 @@ Y = errors[1:trainsize,:]'
 X = Zs[1:trainsize,:]'
 YT = errors[trainsize+1:end,:]'
 XT = Zs[trainsize+1:end,:]'
-x = 0
-thetas = 0
-traintest = 0
-Zs = 0
+preprocess = preprocess[trainsize+1:end,:]
+thetas = thetas[trainsize+1:end,:]
