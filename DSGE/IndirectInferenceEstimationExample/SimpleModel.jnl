@@ -1,0 +1,38 @@
+This is Dynare++, Copyright (C) 2004-2011, Ondra Kamenik
+Dynare++ comes with ABSOLUTELY NO WARRANTY and is distributed under
+GPL: modules integ, tl, kord, sylv, src, extern and documentation
+LGPL: modules parser, utils
+ for GPL  see http://www.gnu.org/licenses/gpl.html
+ for LGPL see http://www.gnu.org/licenses/lgpl.html
+
+
+System info: Linux 4.7.0-1-amd64 #1 SMP Debian 4.7.8-1 (2016-10-19) x86_64, processors online: 4
+
+Start time: Wed Oct 26 20:56:07 2016
+
+  ------ elapsed time (seconds)                     
+  |       ------ record unique identifier           
+  |       |     ------ load average                 
+  |       |     |    ------ available memory (MB)   
+  |       |     |    |     ------  major faults (MB)
+  |       |     |    |     |                        
+  V       V     V    V     V                        
+
+51.2939:S00000:1.3:05342:      : Non-linear solver for deterministic steady state By-passed 
+51.2939:E00000:1.3:05342:000000: Non-linear solver for deterministic steady state By-passed 
+051.299:S00001:1.3:05342:      : Recovering first order derivatives 
+51.2992:M00002:1.3:05342:      :   Blanchard-Kahn condition not satisfied, model not stable: sdim=2 npred=3
+51.2992:M00003:1.3:05342:      :   0	(0.933412,0.000000) / 0.992293  	0.940664
+51.2992:M00004:1.3:05342:      :   1	(0.577853,0.000000) / 0.815450  	0.708631
+51.2992:M00005:1.3:05342:      :   ---------------------------------------------------- sdim
+51.2992:M00006:1.3:05342:      :   2	(0.278350,0.000000) / 0.254872  	1.092127
+51.2992:M00007:1.3:05342:      :   ---------------------------------------------------- npred
+51.2992:M00008:1.3:05342:      :   3	(-0.911902,0.000000) / 0.000000  	inf
+51.2993:M00009:1.3:05342:      :   4	(-1.839967,0.000000) / 0.000000  	inf
+51.2993:M00010:1.3:05342:      :   5	(-2.085071,0.000000) / 0.000000  	inf
+51.2993:M00011:1.3:05342:      :   6	(-1.201664,0.000000) / 0.000000  	inf
+51.2993:M00012:1.3:05342:      :   7	(-1.335675,0.000000) / 0.000000  	inf
+51.2993:M00013:1.3:05342:      :   8	(1.405189,0.000000) / 0.000000  	inf
+51.2993:M00014:1.3:05342:      :   9	(0.766287,0.000000) / 0.000000  	inf
+51.2993:M00015:1.3:05342:      :   10	(1.171830,0.000000) / 1.000000  	1.171830
+51.2994:E00001:1.3:05342:000000: Recovering first order derivatives 

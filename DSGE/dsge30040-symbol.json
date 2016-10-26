@@ -1,0 +1,113 @@
+{
+  "nodes": [
+    {
+      "op": "null", 
+      "param": {}, 
+      "name": "data", 
+      "inputs": [], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "null", 
+      "param": {}, 
+      "name": "fullyconnected0_weight", 
+      "inputs": [], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "null", 
+      "param": {}, 
+      "name": "fullyconnected0_bias", 
+      "inputs": [], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "FullyConnected", 
+      "param": {
+        "no_bias": "False", 
+        "num_hidden": "300"
+      }, 
+      "name": "fullyconnected0", 
+      "inputs": [[0, 0], [1, 0], [2, 0]], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "Activation", 
+      "param": {"act_type": "relu"}, 
+      "name": "activation0", 
+      "inputs": [[3, 0]], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "null", 
+      "param": {}, 
+      "name": "fullyconnected1_weight", 
+      "inputs": [], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "null", 
+      "param": {}, 
+      "name": "fullyconnected1_bias", 
+      "inputs": [], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "FullyConnected", 
+      "param": {
+        "no_bias": "False", 
+        "num_hidden": "40"
+      }, 
+      "name": "fullyconnected1", 
+      "inputs": [[4, 0], [5, 0], [6, 0]], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "Activation", 
+      "param": {"act_type": "relu"}, 
+      "name": "activation1", 
+      "inputs": [[7, 0]], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "null", 
+      "param": {}, 
+      "name": "fullyconnected2_weight", 
+      "inputs": [], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "null", 
+      "param": {}, 
+      "name": "fullyconnected2_bias", 
+      "inputs": [], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "FullyConnected", 
+      "param": {
+        "no_bias": "False", 
+        "num_hidden": "9"
+      }, 
+      "name": "fullyconnected2", 
+      "inputs": [[8, 0], [9, 0], [10, 0]], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "null", 
+      "param": {}, 
+      "name": "label", 
+      "inputs": [], 
+      "backward_source_id": -1
+    }, 
+    {
+      "op": "LinearRegressionOutput", 
+      "param": {"grad_scale": "1"}, 
+      "name": "linearregressionoutput0", 
+      "inputs": [[11, 0], [12, 0]], 
+      "backward_source_id": -1
+    }
+  ], 
+  "arg_nodes": [0, 1, 2, 5, 6, 9, 10, 12], 
+  "heads": [[13, 0]]
+}
