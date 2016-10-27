@@ -9,8 +9,8 @@ function fit = NNstat(Z)
         # get the NN fit
         x = (Z - mZs) ./ sZs;
         preprocess = [ones(size(x,1),1) x]*beta;
-        h1 = tanh(alpha1' + x*beta1);
-        h2 = tanh(alpha2' + h1*beta2);
+        h1 = max(0,alpha1' + x*beta1);
+        h2 = max(0,alpha2' + h1*beta2);
         fit = alpha3' + h2*beta3;
         fit = fit.*sErrors + preprocess;
 endfunction        

@@ -150,6 +150,7 @@ for mcrep = 1:MonteCarloReps
             if kk == 0
                 m0 = m;
                 obj_value = m'*m;
+                obj_value
             else
                 theta(kk,:) = theta(kk,:) - dd; % set back to unperturbed
                 D(kk,:) = (m' - m0') / dd; % compute forward diff. gradient 
