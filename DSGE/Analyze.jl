@@ -12,8 +12,8 @@ error = Y_orig - fit
 bias = mean(error,1)
 mse = mean(error.^2,1)
 rmse = sqrt(mse)
-relbias = 100*bias ./ Y_orig[1,:] # relative measures, in percentage
-relrmse = 100*rmse ./ Y_orig[1,:]
+relbias = 100*bias ./ Y_orig[[1],:] # relative measures, in percentage
+relrmse = 100*rmse ./ Y_orig[[1],:]
 @printf("    bias      rmse       mse   relbias   relrmse\n")
 for i=1:size(bias,2)
     @printf("%8.5f  %8.5f  %8.5f  %8.5f  %8.5f\n", bias[i], rmse[i], mse[i], relbias[i], relrmse[i])
