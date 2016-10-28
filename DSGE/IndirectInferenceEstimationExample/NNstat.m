@@ -13,4 +13,5 @@ function fit = NNstat(Z)
         h2 = max(0,alpha2' + h1*beta2);
         fit = alpha3' + h2*beta3;
         fit = fit.*sErrors + preprocess;
+        fit = abs(fit);
 endfunction        
