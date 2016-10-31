@@ -1,11 +1,11 @@
 # This script trains and saves the 300-40 MLP for the DSGE example
-using MXNet,PyPlot
+using MXNet
 # size of layers
 layer1 = 300
 layer2 = 40
 outputs = 9
-include("dataprep.jl") # creates X,Y,XT,YT, the training and testing inputs and output
-# how to set up data providers using data in memory
+include("dataprep.jl") # load training and testing data
+# set up data providers
 batchsize = 2048 # can adjust this later, but must be defined now for next line
 trainprovider = mx.ArrayDataProvider(:data => X, batch_size=batchsize, shuffle=false, :label => Y)
 evalprovider = mx.ArrayDataProvider(:data => XT, batch_size=batchsize, shuffle=false, :label => YT)
@@ -13,9 +13,9 @@ evalprovider = mx.ArrayDataProvider(:data => XT, batch_size=batchsize, shuffle=f
 data = mx.Variable(:data)
 label = mx.Variable(:label)
 net  = @mx.chain    mx.FullyConnected(data = data, num_hidden=layer1) =>
-                    mx.Activation(act_type=:tanh) =>
+                    mx.Activation(act_type=:relu) =>
                     mx.FullyConnected(num_hidden=layer2) =>
-                    mx.Activation(act_type=:tanh) =>
+                    mx.Activation(act_type=:relu) =>
                     mx.FullyConnected(num_hidden=outputs)        
 # squared error loss is appropriate for regression, don't change
 cost = mx.LinearRegressionOutput(data = net, label=label)
