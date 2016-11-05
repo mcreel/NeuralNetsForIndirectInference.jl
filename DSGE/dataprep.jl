@@ -25,7 +25,6 @@ function Preprocess(data)
     # least squares errors
     errors = Y_orig - x*beta
     # for standardization
-    sErrors = std(errors,1)
     errors = errors ./ sErrors
     Y = errors'
     X = Zs'
