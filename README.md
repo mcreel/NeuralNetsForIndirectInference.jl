@@ -1,6 +1,6 @@
 # NeuralNetsForIndirectInference.jl
 
-This repository provides the code to replicate the results in "Neural Nets for Indirect Inference", forthcoming in Econometrics and Statistics (a WP version is in the file NNII.pdf, in this repo), by Michael Creel.
+This repository provides the code to replicate the results in "Neural Nets for Indirect Inference", forthcoming in Econometrics and Statistics http://www.sciencedirect.com/science/article/pii/S2452306216300326 (a WP version is in the file NNII.pdf, in this repo), by Michael Creel.
 
 The current code uses MXNet.jl, and runs with julia v0.5 or v0.4.
 
