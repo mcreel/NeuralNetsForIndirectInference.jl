@@ -16,7 +16,7 @@ Set the true parameters within these bounds
 alpha  = 0.3;
 beta   = 0.99;
 delta  = 0.04;
-gam    = 2;
+gam    = 2.5;
 rho1   = 0.8;
 sigma1 = 0.03;
 rho2   = 0.3;
@@ -48,7 +48,8 @@ while !ok
     data = data(101:260,:);
     Z = aux_stat(data);
     ok = Z(1,1) != -1000;
-endwhile    
+endwhile
+% compute the output of the net at the input values of the statistics
 thetahat = NNstat(Z');
 fprintf("   true       estimated\n");
 disp([theta0 thetahat']);
