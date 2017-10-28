@@ -19,6 +19,11 @@ md = date - year*10000;
 month = floor(md/100);
 day = date - year*10000 -month*100;
 
+% all of the data, after preparation: save to use for figures
+data = [year month day rets RV5 RV10 BV MedRV];
+save fullsampledata data;
+
+
 % define sample periods
 insample = year >=2015;
 

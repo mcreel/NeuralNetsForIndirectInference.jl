@@ -1,4 +1,5 @@
-load data20152016;
+#load data20152016;
+load fullsampledata;
 year = data(:,1);
 month = data(:,2);
 day = data(:,3);

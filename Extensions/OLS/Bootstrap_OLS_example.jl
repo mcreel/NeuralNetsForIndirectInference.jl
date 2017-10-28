@@ -28,7 +28,7 @@ function main()
             inci2[j] += ((a <= tru[1,j]) & (tru[1,j] <= b))
         end
         =#
-        if mod(i,100)==0
+        if mod(i,100)==10
             println(inci90/i)
             println(inci95/i)
             println(inci99/i)

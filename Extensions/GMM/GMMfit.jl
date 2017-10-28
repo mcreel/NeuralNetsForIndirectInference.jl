@@ -13,7 +13,7 @@ function main()
     beta = [1., 1.] # true parameters
     tau = 0.5
     y,x,z = makeQIVdata(beta, tau, n) # draw the data
-    cholsig = chol(tau*(1.0 -tau)*(z'*z/n))
+    cholsig = chol(tau*(1.0 -tau)*(z'z/n))
     otherargs = (y,x,z,tau,cholsig)
     data = zeros(reps,5)
     @simd for i = 1:reps
