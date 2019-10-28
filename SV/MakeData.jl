@@ -2,7 +2,7 @@ using Pkg
 Pkg.activate(".")
 using SV, Econometrics, StatsBase
 using BSON: @save
-include("NNlib.jl")
+include("SupportFunctions.jl")
 
 function MakeData()
     n = 1000

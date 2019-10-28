@@ -9,10 +9,9 @@ function main()
     whichdep = 1:3
     @load "data.bson" data datadesign
     S = size(data,1)
-    trainsize = Int(0.5*S)
+    trainsize = Int(0.9*S)
     yin = data[1:trainsize, whichdep]'
     yout = data[trainsize+1:end, whichdep]'
-
     x = data[:,4:end]
     xin = x[1:trainsize, :]'
     xout = x[trainsize+1:end, :]'
@@ -34,7 +33,7 @@ function main()
     bestsofar = 1.0e10
     pred = 0.0 # define is here to have it outside the for loop
     inbatch = 0
-    for i = 1:50000
+    for i = 1:1000
         inbatch = rand(size(xin,2)) .< 500.0/size(xin,2)
         batch = DataIterator(xin[:,inbatch],yin[:,inbatch])
         Flux.train!(loss, θ, batch, opt)

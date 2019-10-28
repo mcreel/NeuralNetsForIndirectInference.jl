@@ -5,10 +5,8 @@ current Flux.jl, one of the actively maintained deep learning packages.
 To use this:
 
 1. download the code to some directory
-2. cd to that directory and start julia
-3. activate the project by typing
-    ] activate .
-4. create the data by
+2. cd to the SV subdirectory and start julia
+3. create the training data and Monte Carlo data by
     include("MakeData.jl")
 5. train the net and see results by
     include("Train.jl")
