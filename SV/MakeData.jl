@@ -2,19 +2,20 @@ using Pkg
 Pkg.activate(".")
 using SV, Econometrics, StatsBase
 using BSON: @save
+include("NNlib.jl")
 
 function MakeData()
     n = 1000
     burnin = 1000
-    S = Int(5e5) # size of training and testing
-    SS = 1000 # size of design 
+    S = Int(1e6) # size of training and testing
+    SS = 10000 # size of design 
     # true parameters
     α = exp(-0.736/2.0)
     ρ = 0.9
     σ = 0.363
     θtrue = [α, ρ, σ] # true param values, on param space
     lb = [0.0, 0.0, 0.0]
-    ub = [1.0, 0.99, 1.0]
+    ub = [2.0, 0.99, 2.0]
     data = 0.0
     datadesign = 0.0
     # training and testing
@@ -40,16 +41,14 @@ function MakeData()
         end
         datadesign[s,:] = vcat(θtrue, m)
     end
-    # stack them to get quantiles
-    data = [data; datadesign]
-    # for the aux. stats., use their quantiles instead of raw values
-    for i = 4:size(data,2)
-        tmp = data[:,i]
-        data[:,i] = denserank(tmp)/(S+SS)
-    end
-    # unstack
-    datadesign = data[(S+1):end,:]
-    data = data[1:S,:]
+    # trim the conditioning variables by extreme quantiles to limit outliers,
+    d = [data; datadesign]
+    BoundByQuantiles!(d[:,4:end],0.005)
+    # standardize the conditioning variables
+    #d[:,4:end] = d[:,4:end] ./ std(d[:,4:end], dims=1)
+    datadesign = d[S+1:end,:]
+    data = d[1:S,:]
+
     @save "data.bson" data datadesign
     return nothing
 end
