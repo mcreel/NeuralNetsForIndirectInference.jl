@@ -588,7 +588,7 @@ uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 
 [[SV]]
 deps = ["Econometrics", "LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "4d773a9fc8cc8ef202655eaa7adf150bf729d270"
+git-tree-sha1 = "c6f1bc0db1e8ac6cff750e538e137eaa6ba865c7"
 repo-rev = "master"
 repo-url = "https://github.com/mcreel/SV.git"
 uuid = "94d20700-6971-50d8-a711-55e16dc6ede1"

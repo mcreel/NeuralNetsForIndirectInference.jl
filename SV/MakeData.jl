@@ -23,30 +23,33 @@ function MakeData()
         shocks_u = randn(n+burnin)
         shocks_e = randn(n+burnin)
         θ = rand(size(lb,1)).*(ub-lb) + lb
-        y, volatility = SVmodel(θ, n, shocks_u, shocks_e, false)
+        y, h = SVmodel(θ, n, shocks_u, shocks_e, false)
+        volatility = θ[1]*exp(h/2.0)
         m = sqrt(n)*aux_stat(y)
+        mm = ma(abs.(y),4)[end-4:end] # use a moving average of abs returns to identify current vol.
         if s == 1
-            data = zeros(S, size(vcat(θ, m),1))
+            data = zeros(S, size(vcat(θ, volatility, m, mm),1))
         end
-        data[s,:] = vcat(θ, volatility, m)
+        data[s,:] = vcat(θ, volatility, m, mm)
     end
     # design
     for s = 1:SS
         shocks_u = randn(n+burnin)
         shocks_e = randn(n+burnin)
-        y, volatility = SVmodel(θtrue, n, shocks_u, shocks_e, false)
+        y, h = SVmodel(θtrue, n, shocks_u, shocks_e, false)
+        volatility = θtrue[1]*exp(h/2.0)
         m = sqrt(n)*aux_stat(y)
+        mm = ma(abs.(y),4)[end-4:end]
         if s == 1
-            datadesign = zeros(SS, size(vcat(θtrue, m),1))
+            datadesign = zeros(SS, size(vcat(θtrue, volatility, m, mm),1))
         end
-        datadesign[s,:] = vcat(θtrue, volatility, m)
+        datadesign[s,:] = vcat(θtrue, volatility, m, mm)
     end
     # trim the conditioning variables by extreme quantiles to limit outliers,
     d = [data; datadesign]
     BoundByQuantiles!(d[:,5:end],0.005)
     datadesign = d[S+1:end,:]
     data = d[1:S,:]
-
     @save "data.bson" data datadesign
     return nothing
 end
