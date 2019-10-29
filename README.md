@@ -1,5 +1,10 @@
 # NeuralNetsForIndirectInference.jl
 
+NEW 29 Oct. 2019. The original examples archived here do no run on current Julia (1.x), and the packages that were used also do not
+run on current Julia. The SV subdirectory contains an example for a simple discrete time stochastic volatility model, and this 
+does run on current Julia, using the Flux.jl package, which is actively maintained, and is one of the main deep learning frameworks for 
+Julia. See the readme in the SV directory for more information.
+
 This repository provides the code to replicate the results in "Neural Nets for Indirect Inference", forthcoming in Econometrics and Statistics http://www.sciencedirect.com/science/article/pii/S2452306216300326 (a WP version is in the file NNII.pdf, in this repo), by Michael Creel.
 
 The current code uses MXNet.jl, and runs with julia v0.5 or v0.4.

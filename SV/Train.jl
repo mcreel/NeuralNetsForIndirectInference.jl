@@ -6,26 +6,26 @@ using BSON: @save
 include("SupportFunctions.jl")
 
 function main()
-    whichdep = 1:3
     @load "data.bson" data datadesign
+    whichdep = 1:4
     S = size(data,1)
     trainsize = Int(0.9*S)
     yin = data[1:trainsize, whichdep]'
     yout = data[trainsize+1:end, whichdep]'
-    x = data[:,4:end]
+    x = data[:,5:end]
     xin = x[1:trainsize, :]'
     xout = x[trainsize+1:end, :]'
     ydesign = datadesign[:, whichdep]'
-    xdesign = (datadesign[:, 4:end])'
+    xdesign = (datadesign[:, 5:end])'
     # model
     model = Chain(
         Dense(size(xin,1),100, tanh),
         Dense(100,9, tanh),
-        Dense(9,3)
+        Dense(9,4)
     )
     θ = Flux.params(model)
     opt = AdaMax()
-    P = (1.0 ./ std(data[:,1:3],dims=1))' # weight the errors vars by inverse of in sample std devs
+    P = (1.0 ./ std(data[:,1:4],dims=1))' # weight the errors vars by inverse of in sample std devs
     loss(x,y) = sqrt.(Flux.mse(P.*model(x),P.*y)) #+ 0.01*L2penalty(θ)
     function monitor(e)
         println("epoch $(lpad(e, 4)): (training) loss = $(round(loss(xin,yin).data; digits=4)) (testing) loss = $(round(loss(xout,yout).data; digits=4))| ")
@@ -40,15 +40,7 @@ function main()
         current = loss(xout,yout).data
         if current < bestsofar
             bestsofar = current
-            if whichdep == 1:3
-                @save "best13.bson" model
-            elseif whichdep == 1:1    
-                @save "best1.bson" model
-            elseif whichdep == 2:2    
-                @save "best2.bson" model
-            elseif whichdep == 3:3    
-                @save "best3.bson" model
-            end
+            @save "best.bson" model
             xx = xdesign
             yy = ydesign
             println("________________________________________________________________________________________________")
@@ -59,7 +51,7 @@ function main()
             rmse = sqrt.(mean(error.^2.0,dims=2))
             println(" ")
             println("True values α, ρ, σ: ")
-            prettyprint(reshape(round.(yy[:,1],digits=3),1,3))
+            prettyprint(reshape(round.(yy[1:3,1],digits=3),1,3))
             println(" ")
             println("RMSE for α, ρ, σ: ")
             prettyprint(reshape(round.(rmse,digits=3),1,3))
