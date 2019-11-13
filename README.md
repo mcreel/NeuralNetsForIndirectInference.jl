@@ -8,12 +8,14 @@ The original examples do not run on current Julia (1.x), and the deep learning p
 run on current Julia. The SV subdirectory contains an example for a simple discrete time stochastic volatility model, and this 
 does run on current Julia, using the Flux.jl package, which is actively maintained, and is one of the main deep learning frameworks for Julia.
 
-The example simulates data from the simple discrete time logarithmic stochastic volatility model
-``
-y(t) = a*exp(h(t)/2)*e(t)
-h(t) = b*h(t-1) + c*u(t)
-where e(t) and u(t) are IIN(0,1) shocks.
-``
+The example simulates data from the simple discrete time logarithmic stochastic volatility model::
+
+
+    y(t) = a*exp(h(t)/2)*e(t)
+    h(t) = b*h(t-1) + c*u(t)
+    where e(t) and u(t) are IIN(0,1) shocks.
+
+
 * The parameters are a, b and c.
 * The prior is a uniform distribution over (a,b,c) in (0,2)X(0,1)X(0,1).
 * The net is trained using draws from the prior, and samples of size n=1000.
