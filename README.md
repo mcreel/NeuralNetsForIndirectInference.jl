@@ -3,21 +3,22 @@
 -----------------------------------------------------------------------------------------------------------------------------
 
 NEW 29 Oct. 2019. An example which runs on Julia 1.x
-'''
+
 The original examples do not run on current Julia (1.x), and the deep learning packages that were used also do not
 run on current Julia. The SV subdirectory contains an example for a simple discrete time stochastic volatility model, and this 
 does run on current Julia, using the Flux.jl package, which is actively maintained, and is one of the main deep learning frameworks for Julia.
 
 The example simulates data from the simple discrete time logarithmic stochastic volatility model
+``
 y(t) = a*exp(h(t)/2)*e(t)
 h(t) = b*h(t-1) + c*u(t)
 where e(t) and u(t) are IIN(0,1) shocks.
-
+``
 * The parameters are a, b and c.
 * The prior is a uniform distribution over (a,b,c) in (0,2)X(0,1)X(0,1).
 * The net is trained using draws from the prior, and samples of size n=1000.
 * Then, a Monte Carlo is done using a 1000 draws at the true values a=0.692, b= 0.9, c=0.363 (which are popular choices in the literature). Representative Monte Carlo results are:
-
+``
 ________________________________________________________________________________________________
 epoch  982: (training) loss = 0.1302 (testing) loss = 0.1308| 
  
@@ -40,10 +41,9 @@ dstats prediction error:
            3    -0.00636     0.00402     0.07273    -0.28491     0.15981    -0.13932     0.09571
 
 
-
+``
 To replicate this, git clone the archive, cd to the SV directory, start julia, and do include("MakeData.jl"); include("Train.jl"). The first time, this will tak a while, because a lot of supporting packages must be installed. See the Manifest.toml file for the list of what will be installed into the project environment (not your main Julia environment).
 
-'''
 
 -----------------------------------------------------------------------------------------------------------------------------
 The original readme is preserved below. None of this runs anymore.
