@@ -9,8 +9,8 @@ run on current Julia. The SV subdirectory contains an example for a simple discr
 does run on current Julia, using the Flux.jl package, which is actively maintained, and is one of the main deep learning frameworks for Julia. See the readme in the SV directory for more information.
 
 -----------------------------------------------------------------------------------------------------------------------------
-
-
+The original readme is preserved below. None of this runs anymore.
+-----------------------------------------------------------------------------------------------------------------------------
 
 This repository provides the code to replicate the results in "Neural Nets for Indirect Inference", forthcoming in Econometrics and Statistics http://www.sciencedirect.com/science/article/pii/S2452306216300326 (a WP version is in the file NNII.pdf, in this repo), by Michael Creel.
 
