@@ -21,8 +21,7 @@ The example simulates data from the simple discrete time logarithmic stochastic 
 * The net is trained using draws from the prior, and samples of size n=1000.
 * Then, a Monte Carlo is done using a 1000 draws at the true values a=0.692, b= 0.9, c=0.363 (which are popular choices in the literature). Representative Monte Carlo results are::
 
-![results](https://github.com/mcreel/NeuralNetsForIndirectInference/blob/master/results.png)
-
+![results](https://raw.githubusercontent.com/mcreel/NeuralNetsForIndirectInference.jl/master/results.png)
 
 
 To replicate this, git clone the archive, cd to the SV directory, start julia, and do include("MakeData.jl"); include("Train.jl"). The first time, this will tak a while, because a lot of supporting packages must be installed. See the Manifest.toml file for the list of what will be installed into the project environment (not your main Julia environment).
