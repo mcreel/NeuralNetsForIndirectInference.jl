@@ -2,7 +2,9 @@
 
 -----------------------------------------------------------------------------------------------------------------------------
 
-NEW 29 Oct. 2019. The original examples archived here do no run on current Julia (1.x), and the packages that were used also do not
+NEW 29 Oct. 2019. An example which runs on Julia 1.x
+
+The original examples do not run on current Julia (1.x), and the deep learning packages that were used also do not
 run on current Julia. The SV subdirectory contains an example for a simple discrete time stochastic volatility model, and this 
 does run on current Julia, using the Flux.jl package, which is actively maintained, and is one of the main deep learning frameworks for Julia. See the readme in the SV directory for more information.
 
