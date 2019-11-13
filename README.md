@@ -24,7 +24,7 @@ The example simulates data from the simple discrete time logarithmic stochastic 
 ![results](https://raw.githubusercontent.com/mcreel/NeuralNetsForIndirectInference.jl/master/results.png)
 
 
-To replicate this, git clone the archive, cd to the SV directory, start julia, and do `` include("MakeData.jl"); include("Train.jl")``. The first time, this will take a while, because a lot of supporting packages must be installed. See the ``Manifest.toml`` file for the list of what will be installed into the project environment (not your main Julia environment).
+To replicate this, git clone the archive, cd to the SV directory, start julia, and do `` include("MakeData.jl"); include("Train.jl")``. The first time, this will take a while, because a lot of supporting packages must be installed. See the ``Manifest.toml`` file in the SV directory for the list of what will be installed into the project environment (not your main Julia environment).
 
 
 -----------------------------------------------------------------------------------------------------------------------------
