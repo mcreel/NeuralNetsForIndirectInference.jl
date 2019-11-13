@@ -7,21 +7,21 @@ include("SupportFunctions.jl")
 
 function main()
     @load "data.bson" data datadesign
-    whichdep = 1:4
+    whichdep = 1:3
     S = size(data,1)
-    trainsize = Int(0.9*S)
+    trainsize = Int(0.5*S)
     yin = data[1:trainsize, whichdep]'
     yout = data[trainsize+1:end, whichdep]'
-    x = data[:,5:end]
+    x = data[:,4:end]
     xin = x[1:trainsize, :]'
     xout = x[trainsize+1:end, :]'
     ydesign = datadesign[:, whichdep]'
-    xdesign = (datadesign[:, 5:end])'
+    xdesign = (datadesign[:, 4:end])'
     # model
     model = Chain(
         Dense(size(xin,1),100, tanh),
         Dense(100,9, tanh),
-        Dense(9,4)
+        Dense(9,3)
     )
     θ = Flux.params(model)
     opt = AdaMax()
@@ -52,8 +52,8 @@ function main()
             println("True values α, ρ, σ: ")
             prettyprint(reshape(round.(yy[1:3,1],digits=3),1,3))
             println(" ")
-            println("RMSE for α, ρ, σ and vol. (σₜ): ")
-            prettyprint(reshape(round.(rmse,digits=3),1,4))
+            println("RMSE for α, ρ, σ: ")
+            prettyprint(reshape(round.(rmse,digits=3),1,3))
             println(" ")
             println("dstats prediction:")
             dstats(pred');
