@@ -32,8 +32,8 @@ function main()
     bestsofar = 1.0e10
     pred = 0.0 # define is here to have it outside the for loop
     inbatch = 0
-    for i = 1:1000
-        inbatch = rand(size(xin,2)) .< 500.0/size(xin,2)
+    for i = 1:500
+        inbatch = rand(size(xin,2)) .< 1000.0/size(xin,2)
         batch = DataIterator(xin[:,inbatch],yin[:,inbatch])
         Flux.train!(loss, θ, batch, opt)
         current = loss(xout,yout).data
