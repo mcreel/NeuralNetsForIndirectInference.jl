@@ -586,6 +586,14 @@ version = "0.5.1"
 [[SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 
+[[SV]]
+deps = ["Econometrics", "LinearAlgebra", "Random", "Statistics"]
+git-tree-sha1 = "41f291aff7445781836f98e973bf2d83bf4eff88"
+repo-rev = "master"
+repo-url = "https://github.com/mcreel/SV.git"
+uuid = "94d20700-6971-50d8-a711-55e16dc6ede1"
+version = "0.0.0"
+
 [[Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
@@ -679,9 +687,9 @@ uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[TimerOutputs]]
 deps = ["Printf"]
-git-tree-sha1 = "d9c67bd7ac89aafa75037307331d050998bb5a96"
+git-tree-sha1 = "8f22dc0c23e1cd4ab8070a01ba32285926f104f1"
 uuid = "a759f4b9-e2f1-59dc-863e-4aeb61b1ea8f"
-version = "0.5.1"
+version = "0.5.2"
 
 [[Tracker]]
 deps = ["Adapt", "DiffRules", "ForwardDiff", "LinearAlgebra", "MacroTools", "NNlib", "NaNMath", "Printf", "Random", "Requires", "SpecialFunctions", "Statistics", "Test"]

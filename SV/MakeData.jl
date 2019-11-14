@@ -1,9 +1,8 @@
 using Pkg
 Pkg.activate(".")
-using Econometrics, StatsBase
+using SV, Econometrics, StatsBase
 using BSON: @save
 include("SupportFunctions.jl")
-include("SVmodel.jl")
 
 function MakeData()
     n = 1000
