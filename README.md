@@ -25,6 +25,7 @@ The example simulates data from the simple discrete time logarithmic stochastic 
 
 A plot of the importances of the inputs to the net (as discussed in the paper) is 
 ![statistics](https://raw.githubusercontent.com/mcreel/NeuralNetsForIndirectInference.jl/master/SV/ImportanceOfStatistics.png)
+
 From this, we see that the second to last statistic is not important, and two of the others have a low importance. Some statistics are important. To know more about the statistics, see the function aux_stats, inside the file SVmodel.jl
 
 
