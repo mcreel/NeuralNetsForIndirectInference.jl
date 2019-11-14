@@ -8,6 +8,6 @@ using Plots
 beta = model.layers[1].W.data # get first layer betas
 z = maximum(abs.(beta),dims=1);
 heatmap(z, xlabel="statistic", title="Importance of inputs, bright=high, dark=low")
-savefig("ImportanceOfStatistics.png")
-
+#savefig("ImportanceOfStatistics.png")
+gui()
 
