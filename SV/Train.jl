@@ -10,6 +10,7 @@ function main()
     whichdep = 1:3
     S = size(data,1)
     trainsize = Int(0.5*S)
+    BatchProportion = 0.05 # proportion of train size used in batches
     yin = data[1:trainsize, whichdep]'
     yout = data[trainsize+1:end, whichdep]'
     x = data[:,4:end]
@@ -19,21 +20,21 @@ function main()
     xdesign = (datadesign[:, 4:end])'
     # model
     model = Chain(
-        Dense(size(xin,1),100, tanh),
-        Dense(100,9, tanh),
-        Dense(9,3)
+        Dense(size(xin,1),3*size(xin,1), tanh),
+        Dense(3*size(xin,1),3*size(yout,1), tanh),
+        Dense(3*size(yout,1),size(yout,1))
     )
     θ = Flux.params(model)
     opt = AdaMax()
-    loss(x,y) = sqrt.(Flux.mse(model(x),y)) #+ 0.01*L2penalty(θ)
+    loss(x,y) = Flux.mse(model(x),y) #+ 0.0001*L2penalty(θ)
     function monitor(e)
         println("epoch $(lpad(e, 4)): (training) loss = $(round(loss(xin,yin).data; digits=4)) (testing) loss = $(round(loss(xout,yout).data; digits=4))| ")
     end
     bestsofar = 1.0e10
     pred = 0.0 # define is here to have it outside the for loop
     inbatch = 0
-    for i = 1:500
-        inbatch = rand(size(xin,2)) .< 1000.0/size(xin,2)
+    for i = 1:200
+        inbatch = rand(size(xin,2)) .< BatchProportion
         batch = DataIterator(xin[:,inbatch],yin[:,inbatch])
         Flux.train!(loss, θ, batch, opt)
         current = loss(xout,yout).data

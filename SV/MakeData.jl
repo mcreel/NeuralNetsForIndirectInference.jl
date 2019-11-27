@@ -5,8 +5,8 @@ using BSON: @save
 include("SupportFunctions.jl")
 
 function MakeData()
-    n = 1000
-    burnin = 1000
+    n = 500
+    burnin = 100
     S = Int(1e5) # size of training and testing
     SS = 1000 # size of design 
     # true parameters
