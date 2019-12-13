@@ -23,14 +23,8 @@ function main()
     xdesign = (datadesign[:, 4:end])'
     # model
     model = Chain(
-<<<<<<< HEAD
         Dense(size(xin,1),15, relu),
         Dense(15,3)
-=======
-        Dense(size(xin,1),3*size(xin,1), tanh),
-        Dense(3*size(xin,1),3*size(yout,1), tanh),
-        Dense(3*size(yout,1),size(yout,1))
->>>>>>> f105696cdd75bc6a07fae5068a38a5792c3a10f3
     )
     θ = Flux.params(model)
     opt = AdaMax()
@@ -41,18 +35,10 @@ function main()
     bestsofar = 1.0e10
     pred = 0.0 # define is here to have it outside the for loop
     inbatch = 0
-<<<<<<< HEAD
     for i = 1:500
         batches = [(xin[:,ind],yin[:,ind])  for ind in partition(1:size(yin,2), 32)];
         Flux.train!(loss, θ, batches, opt)
         current = loss(xout,yout)
-=======
-    for i = 1:200
-        inbatch = rand(size(xin,2)) .< BatchProportion
-        batch = DataIterator(xin[:,inbatch],yin[:,inbatch])
-        Flux.train!(loss, θ, batch, opt)
-        current = loss(xout,yout).data
->>>>>>> f105696cdd75bc6a07fae5068a38a5792c3a10f3
         if current < bestsofar
             bestsofar = current
             @save "best.bson" model
