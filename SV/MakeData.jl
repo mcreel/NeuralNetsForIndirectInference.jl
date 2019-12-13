@@ -3,11 +3,11 @@ Pkg.activate(".")
 using Econometrics, StatsBase
 using BSON: @save
 include("SupportFunctions.jl")
-include("SVmodel.jl")
+include("SVlib.jl")
 
 function MakeData()
     n = 1000
-    burnin = 1000
+    burnin = 100
     S = Int(1e5) # size of training and testing
     SS = 1000 # size of design 
     # true parameters
