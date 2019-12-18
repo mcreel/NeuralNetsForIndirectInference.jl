@@ -17,9 +17,9 @@ The example simulates data from the simple discrete time logarithmic stochastic 
 
 
 * The parameters are a, b and c.
-* The prior is a uniform distribution over (a,b,c) in (0,2)X(0,1)X(0,1).
+* The prior is a uniform distribution over (a,b,c) in (0.05,2)X(0.05,1)X(0,1).
 * The net is trained using draws from the prior, and samples of size n=1000.
-* Then, a Monte Carlo is done using a 1000 draws at the true values a=0.692, b= 0.9, c=0.363 (which are popular choices in the literature). Representative Monte Carlo results are::
+* Representative results for testing set are::
 
 ![results](https://raw.githubusercontent.com/mcreel/NeuralNetsForIndirectInference.jl/master/results.png)
 
@@ -28,7 +28,7 @@ A plot of the importances of the inputs to the net (as discussed in the paper) i
 
 From this, we see that the second to last statistic is not important, and two of the others have a low importance. Some statistics are important. To know more about the statistics, see the function aux_stats.jl, at https://github.com/mcreel/SV/blob/master/src/aux_stat.jl
 
-To replicate this, git clone the archive, cd to the SV directory, start julia, and do `` include("MakeData.jl"); include("Train.jl"); include("Analyze.jl")``. The first time, this will take a while, because a lot of supporting packages must be installed. See the ``Manifest.toml`` file in the SV directory for the list of what will be installed into the project environment (not your main Julia environment).
+To replicate this, git clone the archive, cd to the SV directory, start julia, and do `` include("Setup.jl"); include("RunMe.jl"). The first time, this will take a while, because a lot of supporting packages must be installed. See the ``Manifest.toml`` file in the SV directory for the list of what will be installed into the project environment (not your main Julia environment).
 
 
 -----------------------------------------------------------------------------------------------------------------------------
