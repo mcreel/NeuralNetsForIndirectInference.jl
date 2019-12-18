@@ -19,6 +19,7 @@ The example simulates data from the simple discrete time logarithmic stochastic 
 * The parameters are a, b and c.
 * The prior is a uniform distribution over (a,b,c) in (0.05,2)X(0.05,1)X(0,1).
 * The net is trained using draws from the prior, and samples of size n=1000.
+* The cost function can be RMSE for ordinary regression, or a (optionally smoothed) check function for quantile regression. See Train.jl.
 * Representative results for testing set are::
 
 ![results](https://raw.githubusercontent.com/mcreel/NeuralNetsForIndirectInference.jl/master/results.png)
