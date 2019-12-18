@@ -27,7 +27,7 @@ The example simulates data from the simple discrete time logarithmic stochastic 
 A plot of the importances of the inputs to the net (as discussed in the paper) is 
 ![statistics](https://raw.githubusercontent.com/mcreel/NeuralNetsForIndirectInference.jl/master/SV/ImportanceOfStatistics.png)
 
-From this, we see that the fourth, ninth and eleventh statistics are not important, while the first, third, sixth, seventh and twelfth are. To know more about the statistics, see the function aux_stats.jl, at https://github.com/mcreel/SV/blob/master/src/aux_stat.jl
+From this, we see that the fourth, ninth and eleventh statistics are not important, while the first, third, sixth, seventh and twelfth are. To know more about the statistics, see the function aux_stats, in https://github.com/mcreel/NeuralNetsForIndirectInference.jl/blob/master/SV/SVlib.jl
 
 To replicate this, git clone the archive, cd to the SV directory, start julia, and do `` include("Setup.jl"); include("RunMe.jl"). The first time, this will take a while, because a lot of supporting packages must be installed. See the ``Manifest.toml`` file in the SV directory for the list of what will be installed into the project environment (not your main Julia environment).
 
