@@ -50,9 +50,9 @@ function aux_stat(y)
     end
         c1 = q[4]/q[1]
         c2 = q[3]/q[2]
-    #vcat(m, s, s2, k, c, c1, c2, HAR(y))
+    vcat(m, s, s2, k, c, c1, c2, HAR(y))
     # four noise stats
-    vcat(m, s, s2, k, c, c1, c2, HAR(y), randn(4)./sqrt(size(y,1)))
+    #vcat(m, s, s2, k, c, c1, c2, HAR(y), randn(4)./sqrt(size(y,1)))
 end
 
 
