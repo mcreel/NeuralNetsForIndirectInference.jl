@@ -1,4 +1,4 @@
-using Statistics, Random
+using Econometrics, Statistics, Random
 
 # version which generates shock internally
 function SVmodel(θ, n, burnin)
@@ -36,19 +36,23 @@ function HAR(y)
 end
 
 function aux_stat(y)
-    α = sqrt(mean(y.^2.0))
+    s = std(y)
     y = abs.(y)
     m = mean(y)
-    s = std(y)
+    s2 = std(y)
     k = std(y.^2.0)
-    # look for evidence of volatility clusters, for ρ
-    mm = ma(y,5)
-    mm = mm[5:end]
-    clusters1 = quantile(mm,0.75)-quantile(mm, 0.25)
-    mm = ma(y,10)
-    mm = mm[10:end]
-    clusters2 = quantile(mm,0.75)-quantile(mm, 0.25)
-    vcat(α, m, s, k, clusters1, clusters2, HAR(y), mean(cos.(y)), mean(sin.(y)), mean(cos.(2y)), mean(sin.(2y)))
+    c = cor(y[1:end-1],y[2:end])
+    # ratios of quantiles of moving averages to detect clustering
+    q = try
+        q = quantile(ma(y/s2,4), [0.1, 0.25, 0.75, 0.9])
+    catch
+        q = [1.0, 1.0, 0.0, 0.0]
+    end
+        c1 = q[4]/q[1]
+        c2 = q[3]/q[2]
+    #vcat(m, s, s2, k, c, c1, c2, HAR(y))
+    # four noise stats
+    vcat(m, s, s2, k, c, c1, c2, HAR(y), randn(4)./sqrt(size(y,1)))
 end
 
 
