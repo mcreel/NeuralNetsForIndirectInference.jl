@@ -3,35 +3,7 @@
 -----------------------------------------------------------------------------------------------------------------------------
 For work which builds on this, please see my archives SNM and the registered Julia package SimulatedNeuralMoments. The SV example is now included in the SimulatedNeuralMoments package.
 
-NEW 29 Oct. 2019. An example which runs on Julia 1.x
-
-The original examples do not run on current Julia (1.x), and the deep learning packages that were used also do not
-run on current Julia. The SV subdirectory contains an example for a simple discrete time stochastic volatility model, and this 
-does run on current Julia, using the Flux.jl package, which is actively maintained, and is one of the main deep learning frameworks for Julia.
-
-The example simulates data from the simple discrete time logarithmic stochastic volatility model::
-
-
-    y(t) = a*exp(h(t)/2)*e(t)
-    h(t) = b*h(t-1) + c*u(t)
-    where e(t) and u(t) are IIN(0,1) shocks.
-
-
-* The parameters are a, b and c.
-* The prior is a uniform distribution over (a,b,c) in (0.05,2)X(0.05,1)X(0,1).
-* The net is trained using draws from the prior, and samples of size n=1000.
-* The cost function can be RMSE for ordinary regression, or a (optionally smoothed) check function for quantile regression. See Train.jl.
-* Representative results for testing set are::
-
-![results](https://raw.githubusercontent.com/mcreel/NeuralNetsForIndirectInference.jl/master/results.png)
-
-A plot of the importances of the inputs to the net (as discussed in the paper) is 
-![statistics](https://raw.githubusercontent.com/mcreel/NeuralNetsForIndirectInference.jl/master/SV/ImportanceOfStatistics.png)
-
-From this, we see that the fourth, ninth and eleventh statistics are not important, while the first, third, sixth, seventh and twelfth are. To know more about the statistics, see the function aux_stats, in https://github.com/mcreel/NeuralNetsForIndirectInference.jl/blob/master/SV/SVlib.jl
-
-To replicate this, git clone the archive, cd to the SV directory, start julia, and do `` include("Setup.jl"); include("RunMe.jl"). The first time, this will take a while, because a lot of supporting packages must be installed. See the ``Manifest.toml`` file in the SV directory for the list of what will be installed into the project environment (not your main Julia environment).
-
+Basically, the code archived here should not be run, it is just kept to document exactly what was done to create the results reported in the paper.
 
 -----------------------------------------------------------------------------------------------------------------------------
 The original readme is preserved below. None of this runs anymore.
