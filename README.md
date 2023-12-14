@@ -1,7 +1,7 @@
 # NeuralNetsForIndirectInference.jl
 
 -----------------------------------------------------------------------------------------------------------------------------
-For work which builds on this, please see my archives SNM and SimulatedNeuralMoments.
+For work which builds on this, please see my archives SNM and the registered Julia package SimulatedNeuralMoments. The SV example is now included in the SimulatedNeuralMoments package.
 
 NEW 29 Oct. 2019. An example which runs on Julia 1.x
 
